@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>Profilim | &lt;co/de.hub&gt;</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f0f4f5;
+      margin: 0;
+      padding: 0;
+    }
+    nav {
+      background-color: #00796b;
+      padding: 15px 25px;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    nav .logo {
+      font-size: 1.5em;
+      font-weight: bold;
+    }
+    nav .menu a {
+      color: white;
+      text-decoration: none;
+      margin-left: 20px;
+      font-weight: bold;
+      transition: color 0.3s;
+    }
+    nav .menu a:hover {
+      color: #c8e6c9;
+    }
+    .container {
+      background: white;
+      padding: 50px 30px;
+      border-radius: 12px;
+      max-width: 850px;
+      margin: 60px auto;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+    }
+    h2 {
+      color: #00796b;
+      margin-bottom: 30px;
+      font-size: 30px;
+      text-align: center;
+    }
+    .section {
+      margin-bottom: 40px;
+    }
+    .section h3 {
+      color: #004d40;
+      margin-bottom: 15px;
+      font-size: 20px;
+    }
+    .info {
+      font-size: 16px;
+      color: #333;
+      margin-bottom: 10px;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+    li {
+      background-color: #e0f2f1;
+      padding: 15px;
+      margin-bottom: 12px;
+      border-radius: 6px;
+      font-size: 15px;
+    }
+    .label {
+      font-weight: bold;
+      color: #004d40;
+    }
+    pre {
+      background-color: #f5f5f5;
+      padding: 10px;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin-top: 5px;
+      font-size: 14px;
+      line-height: 1.4;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    form {
+      margin-top: 10px;
+    }
+    button {
+      background-color: #c62828;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background-color: #b71c1c;
+    }
+    .footer {
+      text-align: center;
+      margin-top: 60px;
+      font-size: 14px;
+      color: #777;
+      padding-bottom: 20px;
+    }
+    .delete-user {
+      margin-top: 40px;
+      text-align: center;
+    }
+    @media (max-width: 600px) {
+      .container {
+        margin: 30px 20px;
+        padding: 30px 20px;
+      }
+      h2 {
+        font-size: 24px;
+      }
+      nav .menu a {
+        margin-left: 10px;
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="logo">&lt;co/de.hub&gt;</div>
+    <div class="menu">
+      <a href="/">Ana Sayfa</a>
+      <a href="/share">Paylaş</a>
+      <a href="/explore">Keşfet</a>
+      {% if admin_mi %}
+        <a href="/admin">Admin Paneli</a>
+      {% endif %}
+      <a href="/logout">Çıkış</a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h2>👤 Merhaba {{ username }}</h2>
+
+    <div class="section">
+      <p class="info"><span class="label">Kayıt Tarihi:</span> {{ kayit }}</p>
+      <p class="info"><span class="label">Toplam Giriş:</span> {{ girisler|length }}</p>
+    </div>
+
+    <div class="section">
+      <h3>📅 Giriş Geçmişi</h3>
+      <ul>
+        {% for zaman in girisler %}
+          <li>{{ zaman }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div class="section">
+      <h3>📁 Paylaşımlarım</h3>
+      {% if paylasimlar %}
+        <ul>
+          {% for kod in paylasimlar %}
+            <li>
+              <div><span class="label">Etiket:</span> {{ kod.etiket }}</div>
+              <div><span class="label">Zaman:</span> {{ kod.zaman }}</div>
+              <div><span class="label">Kod:</span></div>
+              <pre>{{ kod.kod }}</pre>
+              <form method="POST" action="/delete_share">
+                <input type="hidden" name="hedef_kullanici" value="{{ username }}">
+                <input type="hidden" name="index" value="{{ loop.index0 }}">
+                <button type="submit">Sil</button>
+              </form>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="info">Henüz paylaşımınız yok.</p>
+      {% endif %}
+    </div>
+
+    <div class="delete-user">
+      <form method="POST" action="/delete_user" onsubmit="return confirm('Hesabınızı silmek istediğinize emin misiniz? Bu işlem geri alınamaz.')">
+        <input type="hidden" name="hedef_kullanici" value="{{ username }}">
+        <button type="submit">Hesabımı Sil</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="footer">
+    &copy; 2025 co/de.hub | Geliştirici: Mete Can
+  </div>
+
+</body>
+</html>

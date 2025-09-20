@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>Hoş Geldiniz | &lt;co/de.hub&gt;</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #e0f7fa;
+      margin: 0;
+      padding: 0;
+    }
+    nav {
+      background-color: #00796b;
+      padding: 15px 25px;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    nav .logo {
+      font-size: 1.5em;
+      font-weight: bold;
+    }
+    nav .menu a {
+      color: white;
+      text-decoration: none;
+      margin-left: 20px;
+      font-weight: bold;
+      transition: color 0.3s;
+    }
+    nav .menu a:hover {
+      color: #c8e6c9;
+    }
+    .welcome-box {
+      background: white;
+      padding: 60px 30px;
+      border-radius: 12px;
+      max-width: 640px;
+      margin: 80px auto;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+      text-align: center;
+    }
+    h2 {
+      color: #00796b;
+      font-size: 30px;
+      margin-bottom: 20px;
+    }
+    p {
+      font-size: 17px;
+      color: #444;
+      margin-bottom: 35px;
+      line-height: 1.6;
+    }
+    .btn {
+      display: inline-block;
+      margin: 10px;
+      padding: 12px 24px;
+      background-color: #00796b;
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: bold;
+      transition: background-color 0.3s;
+    }
+    .btn:hover {
+      background-color: #004d40;
+    }
+    .footer {
+      text-align: center;
+      margin-top: 60px;
+      font-size: 14px;
+      color: #777;
+      padding-bottom: 20px;
+    }
+    @media (max-width: 600px) {
+      .welcome-box {
+        margin: 40px 20px;
+        padding: 40px 20px;
+      }
+      h2 {
+        font-size: 24px;
+      }
+      .btn {
+        display: block;
+        width: 100%;
+        margin: 10px 0;
+      }
+      nav .menu a {
+        margin-left: 10px;
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="logo">&lt;co/de.hub&gt;</div>
+    <div class="menu">
+      <a href="/">Ana Sayfa</a>
+      <a href="/profile">Profil</a>
+      <a href="/share">Paylaş</a>
+      <a href="/explore">Keşfet</a>
+      {% if admin_mi %}
+        <a href="/admin">Admin Paneli</a>
+      {% endif %}
+      <a href="/logout">Çıkış</a>
+    </div>
+  </nav>
+
+  <div class="welcome-box">
+    <h2>🎉 Hoş Geldin {{ username }}!</h2>
+    <p>Giriş başarılı! Artık kodlarını paylaşabilir, profilini yönetebilir ve topluluğu keşfedebilirsin.<br>
+    Senin katkılarınla <strong>&lt;co/de.hub&gt;</strong> daha da büyüyecek. İyi ki geldin!</p>
+    <a class="btn" href="/profile">Profilime Git</a>
+    <a class="btn" href="/share">Kod Paylaş</a>
+    <a class="btn" href="/explore">Topluluğu Keşfet</a>
+    {% if admin_mi %}
+      <a class="btn" href="/admin">Admin Paneli</a>
+    {% endif %}
+  </div>
+
+  <div class="footer">
+    &copy; 2025 co/de.hub | Geliştirici: Mete Can
+  </div>
+
+</body>
+</html>
