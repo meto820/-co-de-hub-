@@ -134,7 +134,9 @@ def profile():
     return render_template("profile.html", username=ad, kayit=veri[ad]["kayit_tarihi"],
                            girisler=veri[ad]["girisler"], paylasimlar=veri[ad]["paylasimlar"],
                            admin_mi=admin_mi)
-
+@app.route("/health")
+def health():
+    return "OK", 200
 @app.route("/share", methods=["GET", "POST"])
 def share():
     if "kullanici" not in session:
@@ -205,5 +207,6 @@ if __name__ == "__main__":
     print("Flask uygulaması başlatılıyor...")
     port = int(os.environ.get("PORT", 10000))
     app.run(host="0.0.0.0", port=port
+
 
 
