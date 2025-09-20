@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>Paylaşımları Keşfet | &lt;co/de.hub&gt;</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      color: #00796b;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .kullanici-blok {
+      margin-bottom: 40px;
+    }
+    .kullanici-blok h2 {
+      color: #333;
+      font-size: 22px;
+      margin-bottom: 10px;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 5px;
+    }
+    .paylasim {
+      background-color: #fff;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .etiket, .zaman {
+      font-size: 0.9em;
+      color: #555;
+      margin-top: 5px;
+    }
+    pre {
+      background-color: #f0f0f0;
+      padding: 12px;
+      border-radius: 6px;
+      margin-top: 10px;
+      font-size: 14px;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .geri {
+      text-align: center;
+      margin-top: 40px;
+    }
+    .geri a {
+      text-decoration: none;
+      color: #00796b;
+      font-weight: bold;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🌍 Topluluk Paylaşımları</h1>
+
+  {% for kullanici, veri in kullanicilar.items() %}
+    {% if veri.paylasimlar %}
+      <div class="kullanici-blok">
+        <h2>{{ kullanici }}</h2>
+        {% for paylasim in veri.paylasimlar %}
+          <div class="paylasim">
+            <div class="etiket">Etiket: {{ paylasim.etiket }}</div>
+            <div class="zaman">Paylaşım Zamanı: {{ paylasim.zaman }}</div>
+            <pre>{{ paylasim.kod }}</pre>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endfor %}
+
+  <div class="geri">
+    <a href="/profile">← Profilime Dön</a>
+  </div>
+
+</body>
+</html>

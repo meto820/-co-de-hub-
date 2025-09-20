@@ -2,15 +2,13 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
-  <title>&lt;co/de.hub&gt; Ana Sayfa</title>
+  <title>Hoş Geldiniz | &lt;co/de.hub&gt;</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
     body {
       font-family: 'Segoe UI', sans-serif;
-      background-color: #f0f4f5;
+      background-color: #e0f7fa;
       margin: 0;
       padding: 0;
     }
@@ -37,29 +35,29 @@
     nav .menu a:hover {
       color: #c8e6c9;
     }
-    .container {
+    .welcome-box {
       background: white;
-      padding: 60px 30px;
+      padding: 50px 30px;
       border-radius: 10px;
-      max-width: 700px;
+      max-width: 600px;
       margin: 80px auto;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
       text-align: center;
     }
-    h1 {
-      font-size: 48px;
+    h2 {
       color: #00796b;
+      font-size: 28px;
       margin-bottom: 20px;
     }
     p {
-      font-size: 18px;
-      margin-bottom: 30px;
+      font-size: 16px;
       color: #444;
+      margin-bottom: 30px;
     }
-    .button {
+    .btn {
       display: inline-block;
-      padding: 12px 24px;
       margin: 10px;
+      padding: 12px 24px;
       background-color: #00796b;
       color: white;
       text-decoration: none;
@@ -67,24 +65,15 @@
       font-weight: bold;
       transition: background-color 0.3s;
     }
-    .button:hover {
+    .btn:hover {
       background-color: #004d40;
     }
-    footer {
+    .footer {
       text-align: center;
       margin-top: 60px;
       font-size: 14px;
       color: #777;
       padding-bottom: 20px;
-    }
-    @media (max-width: 600px) {
-      h1 {
-        font-size: 36px;
-      }
-      .container {
-        margin: 40px 20px;
-        padding: 40px 20px;
-      }
     }
   </style>
 </head>
@@ -93,39 +82,32 @@
   <nav>
     <div class="logo">&lt;co/de.hub&gt;</div>
     <div class="menu">
-      {% if session.kullanici %}
-        <a href="/profile">Profil</a>
-        <a href="/share">Paylaş</a>
-        <a href="/explore">Keşfet</a>
-        {% if admin_mi %}
-          <a href="/admin">Admin Paneli</a>
-        {% endif %}
-        <a href="/logout">Çıkış</a>
-      {% else %}
-        <a href="/login">Giriş</a>
-        <a href="/register">Kayıt</a>
-        <a href="/explore">Keşfet</a>
+      <a href="/">Ana Sayfa</a>
+      <a href="/profile">Profil</a>
+      <a href="/share">Paylaş</a>
+      <a href="/explore">Keşfet</a>
+      {% if admin_mi %}
+        <a href="/admin">Admin Paneli</a>
       {% endif %}
+      <a href="/logout">Çıkış</a>
     </div>
   </nav>
 
-  <div class="container">
-    <h1>👋 Hoş Geldin!</h1>
-    <p><strong>&lt;co/de.hub&gt;</strong> geliştiriciler için sade, güçlü ve sosyal bir platformdur.<br>
-    Kodlarını paylaş, öğren, geliştir ve topluluğa katkı sağla.</p>
-    {% if not session.kullanici %}
-      <a class="button" href="/login">Giriş Yap</a>
-      <a class="button" href="/register">Kayıt Ol</a>
-    {% else %}
-      <a class="button" href="/profile">Profilime Git</a>
-      <a class="button" href="/share">Kod Paylaş</a>
+  <div class="welcome-box">
+    <h2>🎉 Hoş Geldin {{ username }}!</h2>
+    <p>Giriş başarılı! Artık kodlarını paylaşabilir, profilini yönetebilir ve topluluğu keşfedebilirsin.<br>
+    Senin katkılarınla <strong>&lt;co/de.hub&gt;</strong> daha da büyüyecek. İyi ki geldin!</p>
+    <a class="btn" href="/profile">Profilime Git</a>
+    <a class="btn" href="/share">Kod Paylaş</a>
+    <a class="btn" href="/explore">Topluluğu Keşfet</a>
+    {% if admin_mi %}
+      <a class="btn" href="/admin">Admin Paneli</a>
     {% endif %}
   </div>
 
-  <footer>
-    Created by Mete Can<br>
-    &copy; 2025 co/de.hub
-  </footer>
+  <div class="footer">
+    &copy; 2025 co/de.hub | Geliştirici: Mete Can
+  </div>
 
 </body>
 </html>
