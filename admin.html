@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Paneli | &lt;co/de.hub&gt;</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      color: #333;
+    }
+    .panel {
+      background: white;
+      padding: 20px;
+      margin-bottom: 30px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    th, td {
+      padding: 10px;
+      border-bottom: 1px solid #ccc;
+      text-align: left;
+      vertical-align: top;
+    }
+    form {
+      margin-top: 10px;
+    }
+    input[type="text"] {
+      padding: 8px;
+      width: 200px;
+      margin-right: 10px;
+    }
+    button {
+      padding: 8px 16px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button.delete {
+      background: #c62828;
+      margin-top: 6px;
+    }
+    .mesaj {
+      margin-top: 10px;
+      color: green;
+    }
+    pre {
+      background: #f0f0f0;
+      padding: 10px;
+      border-radius: 6px;
+      margin-top: 5px;
+      font-size: 14px;
+      overflow-x: auto;
+    }
+    ul {
+      padding-left: 20px;
+      margin-top: 5px;
+      margin-bottom: 15px;
+    }
+    li {
+      font-size: 14px;
+      color: #555;
+    }
+    .kritik {
+      color: #d32f2f;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>👑 Admin Paneli</h1>
+
+  <div class="panel">
+    <h2>Kullanıcı Giriş İstatistikleri</h2>
+    <p>Toplam Kullanıcı: <strong>{{ toplam }}</strong></p>
+    <p>Toplam Giriş Sayısı: <strong>{{ giris_sayisi }}</strong></p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Kullanıcı Adı</th>
+          <th>Giriş Sayısı</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for isim, sayi in veri.items() %}
+        <tr>
+          <td>{{ isim }}</td>
+          <td>{{ sayi }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="panel">
+    <h2>📅 Sistem Logları</h2>
+    {% for kullanici, bilgiler in kullanicilar.items() %}
+      <h3>{{ kullanici }}</h3>
+      {% if bilgiler.loglar %}
+        <ul>
+          {% for log in bilgiler.loglar|reverse %}
+            <li class="{% if 'Hatalı' in log.olay or loop.index0 == 0 %}kritik{% endif %}">
+              {{ log.zaman }} - {{ log.olay }}
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p>Log kaydı yok.</p>
+      {% endif %}
+    {% endfor %}
+  </div>
+
+  <div class="panel">
+    <h2>Yeni Admin Ekle</h2>
+    <form method="POST">
+      <input type="text" name="yeni_admin" placeholder="Kullanıcı adı girin" required>
+      <button type="submit">Admin Yap</button>
+    </form>
+    {% if mesaj %}
+      <div class="mesaj">{{ mesaj }}</div>
+    {% endif %}
+  </div>
+
+  <div class="panel">
+    <h2>📁 Tüm Paylaşımlar</h2>
+    {% for kullanici, bilgiler in kullanicilar.items() %}
+      <h3>{{ kullanici }}</h3>
+      {% if bilgiler.paylasimlar %}
+        <table>
+          <thead>
+            <tr>
+              <th>Etiket</th>
+              <th>Zaman</th>
+              <th>Kod</th>
+              <th>İşlem</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for kod in bilgiler.paylasimlar %}
+            <tr>
+              <td>{{ kod.etiket }}</td>
+              <td>{{ kod.zaman }}</td>
+              <td><pre>{{ kod.kod }}</pre></td>
+              <td>
+                <form method="POST" action="/delete_share">
+                  <input type="hidden" name="hedef_kullanici" value="{{ kullanici }}">
+                  <input type="hidden" name="index" value="{{ loop.index0 }}">
+                  <button type="submit" class="delete">Sil</button>
+                </form>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+        <p>Paylaşım yok.</p>
+      {% endif %}
+
+      <form method="POST" action="/delete_user" onsubmit="return confirm('{{ kullanici }} adlı kullanıcıyı silmek istediğinize emin misiniz?')">
+        <input type="hidden" name="hedef_kullanici" value="{{ kullanici }}">
+        <button type="submit" class="delete">Kullanıcıyı Sil</button>
+      </form>
+
+    {% endfor %}
+  </div>
+
+</body>
+</html>
