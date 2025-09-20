@@ -193,6 +193,19 @@ def delete_user():
 
     if aktif != hedef and not veri.get(aktif, {}).get("admin"):
         return "Yetkisiz işlem", 403
+
+
+@app.route("/delete_user", methods=["POST"])
+def delete_user():
+    if "kullanici" not in session:
+        return redirect("/login")
+
+    aktif = session["kullanici"]
+    hedef = request.form.get("hedef_kullanici")
+    veri = kullanicilari_yukle()
+
+    if aktif != hedef and not veri.get(aktif, {}).get("admin"):
+        return "Yetkisiz işlem", 403
     if hedef not in veri:
         return "Kullanıcı bulunamadı", 404
 
@@ -209,4 +222,3 @@ if __name__ == "__main__":
     print("Flask uygulaması başlatılıyor...")
     port = int(os.environ.get("PORT", 10000))
     app.run(host="0.0.0.0", port=port)
-
