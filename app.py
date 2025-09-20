@@ -134,9 +134,11 @@ def profile():
     return render_template("profile.html", username=ad, kayit=veri[ad]["kayit_tarihi"],
                            girisler=veri[ad]["girisler"], paylasimlar=veri[ad]["paylasimlar"],
                            admin_mi=admin_mi)
+
 @app.route("/health")
 def health():
     return "OK", 200
+
 @app.route("/share", methods=["GET", "POST"])
 def share():
     if "kullanici" not in session:
@@ -184,12 +186,6 @@ def delete_share():
 def delete_user():
     if "kullanici" not in session:
         return redirect("/login")
-@app.route("/")
-def index():
-    ad = session.get("kullanici")
-    veri = kullanicilari_yukle()
-    admin_mi = veri.get(ad, {}).get("admin", False) if ad else False
-    return render_template("index.html", admin_mi=admin_mi)
 
     aktif = session["kullanici"]
     hedef = request.form.get("hedef_kullanici")
@@ -213,8 +209,4 @@ if __name__ == "__main__":
     print("Flask uygulaması başlatılıyor...")
     port = int(os.environ.get("PORT", 10000))
     app.run(host="0.0.0.0", port=port)
-
-
-
-
 
