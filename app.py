@@ -37,6 +37,7 @@ def log_ekle(kullanici, olay):
     with open(LOG_DOSYASI, "a", encoding="utf-8") as f:
         f.write(f"{zaman} - {kullanici} - {olay}\n")
 
+# Genel Sayfalar
 @app.route("/")
 def index():
     ad = session.get("kullanici")
@@ -44,6 +45,15 @@ def index():
     admin_mi = veri.get(ad, {}).get("admin", False) if ad else False
     return render_template("index.html", admin_mi=admin_mi)
 
+@app.route("/health")
+def health():
+    return "OK", 200
+
+@app.route("/explore")
+def explore():
+    return render_template("explore.html")
+
+# Kullanıcı İşlemleri
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
@@ -97,33 +107,6 @@ def welcome():
     admin_mi = veri.get(ad, {}).get("admin", False)
     return render_template("welcome.html", username=ad, admin_mi=admin_mi)
 
-@app.route("/admin", methods=["GET", "POST"])
-def admin():
-    ad = session.get("kullanici")
-    veri = kullanicilari_yukle()
-    if not ad or not veri.get(ad, {}).get("admin"):
-        return redirect("/")
-
-    mesaj = ""
-    if request.method == "POST":
-        yeni_admin = request.form.get("yeni_admin")
-        if yeni_admin in veri:
-            veri[yeni_admin]["admin"] = True
-            kullanicilari_kaydet(veri)
-            mesaj = f"{yeni_admin} artık bir admin!"
-        else:
-            mesaj = "Kullanıcı bulunamadı."
-
-    grafik_verisi = {
-        isim: len(kullanici.get("girisler", []))
-        for isim, kullanici in veri.items()
-    }
-    toplam_kullanici = len(veri)
-    toplam_giris = sum(len(kullanici.get("girisler", [])) for kullanici in veri.values())
-
-    return render_template("admin.html", veri=grafik_verisi, toplam=toplam_kullanici,
-                           giris_sayisi=toplam_giris, mesaj=mesaj, kullanicilar=veri)
-
 @app.route("/profile")
 def profile():
     if "kullanici" not in session:
@@ -135,10 +118,7 @@ def profile():
                            girisler=veri[ad]["girisler"], paylasimlar=veri[ad]["paylasimlar"],
                            admin_mi=admin_mi)
 
-@app.route("/health")
-def health():
-    return "OK", 200
-
+# Paylaşım İşlemleri
 @app.route("/share", methods=["GET", "POST"])
 def share():
     if "kullanici" not in session:
@@ -182,18 +162,33 @@ def delete_share():
     log_ekle(aktif, f"{hedef} paylaşımı silindi: {etiket}")
     return redirect("/profile" if aktif == hedef else "/admin")
 
-@app.route("/delete_user", methods=["POST"])
-def delete_user():
-    if "kullanici" not in session:
-        return redirect("/login")
-
-    aktif = session["kullanici"]
-    hedef = request.form.get("hedef_kullanici")
+# Admin İşlemleri
+@app.route("/admin", methods=["GET", "POST"])
+def admin():
+    ad = session.get("kullanici")
     veri = kullanicilari_yukle()
+    if not ad or not veri.get(ad, {}).get("admin"):
+        return redirect("/")
 
-    if aktif != hedef and not veri.get(aktif, {}).get("admin"):
-        return "Yetkisiz işlem", 403
+    mesaj = ""
+    if request.method == "POST":
+        yeni_admin = request.form.get("yeni_admin")
+        if yeni_admin in veri:
+            veri[yeni_admin]["admin"] = True
+            kullanicilari_kaydet(veri)
+            mesaj = f"{yeni_admin} artık bir admin!"
+        else:
+            mesaj = "Kullanıcı bulunamadı."
 
+    grafik_verisi = {
+        isim: len(kullanici.get("girisler", []))
+        for isim, kullanici in veri.items()
+    }
+    toplam_kullanici = len(veri)
+    toplam_giris = sum(len(kullanici.get("girisler", [])) for kullanici in veri.values())
+
+    return render_template("admin.html", veri=grafik_verisi, toplam=toplam_kullanici,
+                           giris_sayisi=toplam_giris, mesaj=mesaj, kullanicilar=veri)
 
 @app.route("/delete_user", methods=["POST"])
 def delete_user():
@@ -218,7 +213,4 @@ def delete_user():
         return redirect("/")
     else:
         return redirect("/admin")
-if __name__ == "__main__":
-    print("Flask uygulaması başlatılıyor...")
-    port = int(os.environ.get("PORT", 10000))
-    app.run(host="0.0.0.0", port=port)
+
