@@ -4,8 +4,6 @@ import os, json
 
 app = Flask(__name__)
 app.secret_key = "gizli_anahtar"
-port = int(os.environ.get("PORT", 8080))
-app.run(host="0.0.0.0", port=port)
 DATA_KLASORU = "data"
 LOG_DOSYASI = os.path.join(DATA_KLASORU, "log.txt")
 KULLANICI_DOSYASI = os.path.join(DATA_KLASORU, "kullanicilar.json")
@@ -214,5 +212,6 @@ def delete_user():
         return redirect("/")
     else:
         return redirect("/admin")
+
 
 
