@@ -1,2 +1,2 @@
-[start]
-cmd = "gunicorn main:app"
+[env]
+PORT = "8080"
