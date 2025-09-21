@@ -1,4 +1,4 @@
-app = "codehub"
+app = "metehub"
 primary_region = "ams"
 
 [build]
